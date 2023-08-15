@@ -1,0 +1,11 @@
+{
+    "todoist_api_key": "",
+    "canvas_api_key": "TOKEN 1",
+    "canvas_api_heading": "https://canvas.instructure.com",
+    "todoist_task_priority": 1,
+    "todoist_task_labels": [],
+    "sync_null_assignments": true,
+    "sync_locked_assignments": true,
+    "sync_no_due_date_assignments": true,
+    "courses": []
+}
