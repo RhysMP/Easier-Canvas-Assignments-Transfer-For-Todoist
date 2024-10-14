@@ -17,7 +17,6 @@ course_ids = []
 assignments = []
 todoist_tasks = []
 courses_id_name_dict = {}
-todoist_project_dict = {}
 todoist_section_dict = {}
 throttle_number = 50  # Number of requests to make before sleeping for delay seconds
 sleep_delay_max = 2500  # Maximum number of milliseconds to sleep for
@@ -34,13 +33,12 @@ def main():
     select_courses()
     print(f"Selected {len(course_ids)} courses")
     print("Syncing Canvas Assignments...")
-    load_todoist_projects()
+    load_todoist_sections()
     load_assignments()
     load_todoist_tasks()
     create_todoist_section()
     transfer_assignments_to_todoist()
     canvas_assignment_stats()
-    print(todoist_section_dict)
     print("Done!")
 
 
@@ -230,25 +228,14 @@ def load_todoist_tasks():
     print(f"Loaded {len(todoist_tasks)} Todoist Tasks")
 
 
-# Loads all user projects from Todoist
-def load_todoist_projects():
-    projects = todoist_api.get_projects()
-    for project in projects:
-        todoist_project_dict[project.name] = project.id
-    print(f"Loaded {len(todoist_project_dict)} Todoist Projects")
+
+def load_todoist_sections():
+    sections = todoist_api.get_sections()
+    for section in sections:
+        todoist_section_dict[section.name] = section.id
+        print(f"Loaded {section.name}")
 
 
-# Checks to see if the user has a project matching their course names, if there
-# is not a new project will be created
-# def create_todoist_projects():
-#     for course_id in course_ids:
-#         if courses_id_name_dict[course_id] not in todoist_project_dict:
-#             project = todoist_api.add_project(courses_id_name_dict[course_id])
-#             print(f"Project {courses_id_name_dict[course_id]} created")
-#             todoist_project_dict[project.name] = project.id
-#         else:
-#             print(f"Project {courses_id_name_dict[course_id]} exists")
-#
 def create_todoist_section():
     for course_id in course_ids:
         if courses_id_name_dict[course_id] not in todoist_section_dict:
