@@ -65,6 +65,7 @@ def initialize_api():
     # create todoist_api object globally
     todoist_api = TodoistAPI(config["todoist_api_key"].strip())
     header.update({"Authorization": f"Bearer {config['canvas_api_key'].strip()}"})
+    todoist_project_id = config["todoist_project_ids"].strip()
 
 
 def initial_config():  # Initial configuration for first time users
@@ -76,6 +77,10 @@ def initial_config():  # Initial configuration for first time users
         "Your Canvas API key has not been configured. To add an API token, go to your Canvas settings and click on New Access Token under Approved Integrations. Copy the token and paste below when you are done."
     )
     config["canvas_api_key"] = input(">")
+    print(
+        "Your Todoist Project key ID not been configured. Paste Below"
+    )
+    config["todoist_project_ids"] = input(">")
     defaults = yes_no("Use default options? (enter n for advanced config)")
     if defaults == True:
         config["canvas_api_heading"] = "https://canvas.instructure.com"
@@ -379,7 +384,7 @@ def transfer_assignments_to_todoist():
 
 # Adds a new task from a Canvas assignment object to Todoist under the
 # project corresponding to project_id
-def add_new_task(assignment, project_id):
+def add_new_task(assignment, todoist_project_id):
     course_name = courses_id_name_dict[assignment["course_id"]]
     global limit_reached
     try:
@@ -390,7 +395,7 @@ def add_new_task(assignment, project_id):
             + assignment["html_url"]
             + ")"
             + " Due",
-            project_id=project_id,
+            project_id=todoist_project_id,
             due_datetime=assignment["due_at"],
             labels=config["todoist_task_labels"],
             priority=config["todoist_task_priority"],
