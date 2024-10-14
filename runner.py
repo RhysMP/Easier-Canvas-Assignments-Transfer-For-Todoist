@@ -40,6 +40,7 @@ def main():
     create_todoist_section()
     transfer_assignments_to_todoist()
     canvas_assignment_stats()
+    print(todoist_section_dict)
     print("Done!")
 
 
@@ -271,6 +272,7 @@ def transfer_assignments_to_todoist():
     for assignment in assignments:
         course_name = courses_id_name_dict[assignment["course_id"]]
         project_id = 2341695199
+        # section_id =
 
         is_added = False
         is_synced = True
@@ -391,6 +393,7 @@ def transfer_assignments_to_todoist():
 # Adds a new task from a Canvas assignment object to Todoist under the
 # project corresponding to project_id
 def add_new_task(assignment, project_id):
+    course_name = courses_id_name_dict[assignment["course_id"]]
     global limit_reached
     try:
         todoist_api.add_task(
@@ -404,6 +407,7 @@ def add_new_task(assignment, project_id):
             due_datetime=assignment["due_at"],
             labels=config["todoist_task_labels"],
             priority=config["todoist_task_priority"],
+            section_id= todoist_section_dict[course_name]
         )
     except Exception as error:
         print(
